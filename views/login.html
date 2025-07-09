@@ -1,0 +1,16 @@
+<div class="container-fluid d-flex justify-content-center align-items-center vh-100">
+  <div class="w-100 p-5 rounded-4 " style="max-width: 600px; background-color: #ffe2bd;">
+    <h1 class="text-center mb-4" style="color: #ff9102;">Login Page</h1>
+    <form ng-submit="loginUser()" class="d-flex flex-column gap-4">
+      <input type="text" class="form-control p-3" ng-model="loginInformation.username"
+        placeholder="Enter your username here..." required>
+      <input type="password" class="form-control p-3" ng-model="loginInformation.password"
+        placeholder="Enter your password here..." required>
+      <button type="submit" class="btn text-white w-100 p-3" style="background-color: #ff9102;">Login</button>
+    </form>
+    <p class="text-center mt-3">
+      Don't have an account? <a href="#!/signup" class="text-decoration-none fw-bold" style="color: #ff9102;">Sign Up
+        Now!</a>
+    </p>
+  </div>
+</div>

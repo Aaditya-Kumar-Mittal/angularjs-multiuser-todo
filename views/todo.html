@@ -1,0 +1,114 @@
+<div class="container-fluid d-flex justify-content-center flex-column gap-4 align-items-center">
+
+  <div class="container align-items-center justify-content-center w-100 p-3 rounded-3 mt-5"
+    style="background-color: #fff0dd;">
+    <div class="row align-items-center">
+      <div class="col-9">
+        <h1 class="text-center">Todo Manager For {{user.username}}</h1>
+      </div>
+      <div class="col-3"><button type="button" ng-click="logout()" class="btn text-center text-white w-100"
+          style="background-color: #ff9102;">Logout</button></div>
+    </div>
+  </div>
+
+
+  <div class="container d-flex flex-column gap-4 rounded-3 p-5" style="background-color: #fff0dd;">
+    <div class="row">
+      <h3 class="text-center">{{ indexToEdit === -1 ? "Add New Todo" : "Update Todo" }}</h3>
+    </div>
+    <div class="row">
+      <div class="col">
+        <input type="text" ng-model="newTodo.title" class="form-control p-3" placeholder="Enter your title here..."
+          required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <input type="text" ng-model="newTodo.description" placeholder="Enter your description here..."
+          class="form-control p-3" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <input type="date" ng-model="newTodo.date" class="form-control p-3" required>
+      </div>
+      <div class="col">
+        <select ng-model="newTodo.status" required class="form-control p-3">
+          <option value="Pending">Pending</option>
+          <option value="Done">Done</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button ng-click="addTodo()" class="btn text-center text-white w-100" style="background-color: #ff9102;">{{
+          indexToEdit === -1 ? "Add Todo" : "Update Todo" }}</button>
+      </div>
+      <div class="col">
+        <button type="button" ng-click="resetForm()" class="btn text-center text-white w-100"
+          style="background-color: #ff9102;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container d-flex flex-column gap-4 rounded-3 p-5 mb-5" style="background-color: #fff0dd;">
+
+    <div class="row">
+      <div class="col">
+        <h2 class="text-center">Task List</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col col-3"><label class="text-center fw-bold">Filter by Status:</label></div>
+      <div class="col col-9">
+        <select ng-model="filterStatus" class="form-control">
+          <option value="">All</option>
+          <option>Pending</option>
+          <option>Done</option>
+        </select>
+      </div>
+    </div>
+    <ul class="list-group">
+      <li ng-repeat="todo in getFilteredTasks() track by $index" class="list-group-item p-3">
+        <div class="row mb-3 d-flex align-items-center justify-content-center">
+          <div class="col col-9">
+            <h5>{{todo.title}}</h5>
+          </div>
+          <div class="col col-3">{{todo.date | date}}</div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p>{{todo.description}}</p>
+          </div>
+        </div>
+        <div class="row my-3">
+          <div class="col">
+            <strong>Status: {{todo.status}}</strong>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button ng-click="editTodo($index)" class="btn btn-warning text-white w-100">
+              Edit
+            </button>
+          </div>
+
+          <div class="col">
+            <button ng-click="deleteTodo($index)" class="btn btn-danger text-white w-100">
+              Delete
+            </button>
+          </div>
+
+          <div class="col">
+            <button ng-if="todo.status === 'Pending'" ng-click="markDone(todo)"
+              class="btn btn-success text-white w-100">
+              Mark as Done
+            </button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
