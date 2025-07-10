@@ -87,6 +87,7 @@ angular.module("taskApp").factory("TodoService", function () {
       var todos = this.getTodosFromLocalStorage(user);
       todos[index] = todo;
       this.saveTodosToLocalStorage(user, todos);
+      
     },
 
     deleteTodos: function (user, index) {

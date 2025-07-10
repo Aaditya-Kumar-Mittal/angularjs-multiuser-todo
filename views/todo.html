@@ -14,7 +14,8 @@
 
   <div class="container d-flex flex-column gap-4 rounded-3 p-5" style="background-color: #fff0dd;">
     <div class="row">
-      <h3 class="text-center">{{ indexToEdit === -1 ? "Add New Todo" : "Update Todo" }}</h3>
+      <h3 class="text-center" ng-show="indexToEdit === -1">Add New Todo</h3>
+      <h3 class="text-center" ng-show="indexToEdit !== -1">Update Todo</h3>
     </div>
     <div class="row">
       <div class="col">
@@ -30,7 +31,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <input type="date" ng-model="newTodo.date" class="form-control p-3" required>
+        <input type="date" ng-model="newTodo.dueDate" class="form-control p-3" required>
       </div>
       <div class="col">
         <select ng-model="newTodo.status" required class="form-control p-3">
@@ -41,8 +42,12 @@
     </div>
     <div class="row">
       <div class="col">
-        <button ng-click="addTodo()" class="btn text-center text-white w-100" style="background-color: #ff9102;">{{
-          indexToEdit === -1 ? "Add Todo" : "Update Todo" }}</button>
+
+        <!-- The button here was using ternary option to check the condition for edit index but the ng-click was calling only addTodo(). So, hence this was causing the error. -->
+        <button ng-if="indexToEdit === -1" ng-click="addTodo()" class="btn text-center text-white w-100"
+          style="background-color: #ff9102;">Add</button>
+        <button ng-if="indexToEdit !== -1" ng-click="updateTodo()" class="btn text-center text-white w-100"
+          style="background-color: #ff9102;">Update</button>
       </div>
       <div class="col">
         <button type="button" ng-click="resetForm()" class="btn text-center text-white w-100"
@@ -73,10 +78,14 @@
     <ul class="list-group">
       <li ng-repeat="todo in getFilteredTasks() track by $index" class="list-group-item p-3">
         <div class="row mb-3 d-flex align-items-center justify-content-center">
-          <div class="col col-9">
+          <div class="col col-6">
             <h5>{{todo.title}}</h5>
           </div>
-          <div class="col col-3">{{todo.date | date}}</div>
+          <div class="col col-3">
+            <span>Created: {{ todo.createdAt | date:'medium' }}</span>
+            <span ng-if="todo.updatedAt">Updated: {{ todo.updatedAt | date:'medium' }}</span>
+          </div>
+          <div class="col col-3">Due Date: {{todo.dueDate | date}}</div>
         </div>
         <div class="row">
           <div class="col">

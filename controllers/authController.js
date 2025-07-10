@@ -18,6 +18,10 @@ angular.module("taskApp").controller("AuthController", [
     };
     $scope.loginUser = function () {
       if (AuthService.loginToApplication($scope.loginInformation)) {
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify({ username: $scope.loginInformation.username })
+        );
         $location.path("/todos/" + $scope.loginInformation.username);
       } else {
         alert("Invalid Credentials! Kindly Try Again!");

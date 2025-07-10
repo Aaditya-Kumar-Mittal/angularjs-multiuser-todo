@@ -11,12 +11,21 @@ angular.module("taskApp").controller("TodoController", [
     // Route params se username fetch karo
     $scope.user = { username: $routeParams.username };
 
+    var loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!loggedInUser || loggedInUser.username !== $routeParams.username) {
+      alert("Unauthorized access. Please log in.");
+      $location.path("/").replace();
+      return;
+    }
+
     // Sample new Todo object
     $scope.newTodo = {
       title: "",
       description: "",
-      date: "",
+      dueDate: "",
       status: "Pending",
+      createdAt: null,
+      updatedAt: null,
     };
 
     $scope.indexToEdit = -1;
@@ -28,8 +37,10 @@ angular.module("taskApp").controller("TodoController", [
       $scope.newTodo = {
         title: "",
         description: "",
-        date: "",
+        dueDate: "",
         status: "Pending",
+        createdAt: null,
+        updatedAt: null,
       };
       $scope.indexToEdit = -1;
     };
@@ -38,8 +49,9 @@ angular.module("taskApp").controller("TodoController", [
       if (
         $scope.newTodo.title &&
         $scope.newTodo.description &&
-        $scope.newTodo.date
+        $scope.newTodo.dueDate
       ) {
+        $scope.newTodo.createdAt = new Date().toISOString();
         TodoService.addTodosToLocalStorage(
           $scope.user,
           angular.copy($scope.newTodo)
@@ -61,12 +73,13 @@ angular.module("taskApp").controller("TodoController", [
 
     $scope.updateTodo = function () {
       if ($scope.indexToEdit !== -1) {
+        $scope.newTodo.updatedAt = new Date().toISOString();
         TodoService.updateTodos(
           $scope.user,
           $scope.indexToEdit,
           angular.copy($scope.newTodo)
         );
-        $scope.tasks = TodoService.getTodosFromLocalStorage($scope.user);
+        $scope.todos = TodoService.getTodosFromLocalStorage($scope.user);
         $scope.resetForm();
       }
     };
@@ -88,7 +101,18 @@ angular.module("taskApp").controller("TodoController", [
     };
 
     $scope.logout = function () {
-      $location.path("/");
+      console.log("logout");
+
+      localStorage.removeItem("loggedInUser");
+      $location.path("/").replace();
+    };
+
+    $scope.toggleUpdateFunctionality = function () {
+      if (indexToEdit === -1) {
+        return "Add Todo";
+      } else {
+        return "Update Todo";
+      }
     };
   },
 ]);
